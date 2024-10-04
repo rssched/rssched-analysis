@@ -4,8 +4,8 @@ from rssched.model.response import Response
 from rssched.visualization.colors import EVENT_TYPES
 
 
-def plot_gantt_per_vehicle_type(response: Response, instance_name: str):
-    figures = []
+def plot_gantt_per_vehicle_type(response: Response, instance_name: str) -> dict:
+    figures = {}
 
     for vehicle_type in response.schedule.fleet:
         vis_data = []
@@ -37,17 +37,15 @@ def plot_gantt_per_vehicle_type(response: Response, instance_name: str):
                         "Type": "DeadHeadTrip",
                     }
                 )
-        figures.append(
-            ff.create_gantt(
-                vis_data,
-                title=f"Rolling stock schedule: {vehicle_type.vehicle_type} (instance: {instance_name})",
-                colors=EVENT_TYPES,
-                index_col="Type",
-                show_colorbar=True,
-                group_tasks=True,
-                showgrid_x=True,
-                height=1200,
-            )
+        figures[vehicle_type.vehicle_type] = ff.create_gantt(
+            vis_data,
+            title=f"Rolling stock schedule: {vehicle_type.vehicle_type} (instance: {instance_name})",
+            colors=EVENT_TYPES,
+            index_col="Type",
+            show_colorbar=True,
+            group_tasks=True,
+            showgrid_x=True,
+            height=1200,
         )
 
     return figures
