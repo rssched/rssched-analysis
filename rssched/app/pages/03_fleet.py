@@ -19,4 +19,5 @@ with tabs[1]:
     st.plotly_chart(plot_vehicle_utilization(response, instance_name))
 
 with tabs[2]:
-    st.plotly_chart(plot_fleet_efficiency(response, instance_name))
+    for fig in plot_fleet_efficiency(response, instance_name):
+        st.plotly_chart(fig)

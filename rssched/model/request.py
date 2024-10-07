@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -18,7 +18,7 @@ class Location(BaseModel):
 
 class AllowedType(BaseModel):
     vehicle_type: str
-    upper_bound: Optional[int] = None
+    capacity: Optional[int] = None
 
 
 class Depot(BaseModel):
