@@ -8,6 +8,12 @@ from rssched.app.utils.io import import_request, import_response
 from rssched.data.access import PkgDataAccess
 
 
+def toggle_sidebar():
+    st.session_state.sidebar_state = (
+        "collapsed" if st.session_state.sidebar_state == "expanded" else "expanded"
+    )
+
+
 def set_file_in_session_state(
     request_file_bytes: BytesIO, response_file_bytes: BytesIO
 ) -> None:
@@ -60,6 +66,15 @@ def handle_file_upload() -> Optional[Tuple[BytesIO, BytesIO]]:
     return None
 
 
+# Initialize session state to store file uploads
+if "request_file" not in st.session_state:
+    st.session_state.request_file = None
+if "response_file" not in st.session_state:
+    st.session_state.response_file = None
+if "sidebar_state" not in st.session_state:
+    st.session_state.sidebar_state = "collapsed"
+
+st.set_page_config(initial_sidebar_state=st.session_state.sidebar_state)
 st.title("RSSched Analyzer")
 st.markdown(
     """
@@ -69,12 +84,6 @@ You can see important statistics such as the number of locations, vehicle types,
 routes, and other relevant metrics. Additionally, an objective value from the response is also displayed below.
 """
 )
-
-# Initialize session state to store file uploads
-if "request_file" not in st.session_state:
-    st.session_state.request_file = None
-if "response_file" not in st.session_state:
-    st.session_state.response_file = None
 
 # Check if files have been uploaded
 files_uploaded = (
@@ -89,11 +98,13 @@ if not files_uploaded:
     if uploaded_files:
         request_file, response_file = uploaded_files
         set_file_in_session_state(request_file, response_file)
+        toggle_sidebar()
         st.rerun()
 
     if st.button("Load Example"):
         example_request_file, example_response_file = load_example_files()
         set_file_in_session_state(example_request_file, example_response_file)
+        toggle_sidebar()
         st.rerun()
 
 
@@ -107,4 +118,5 @@ if files_uploaded:
         st.session_state.response_file = None
         st.session_state.request_data = None
         st.session_state.response_data = None
+        toggle_sidebar()
         st.rerun()
