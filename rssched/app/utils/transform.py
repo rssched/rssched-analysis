@@ -14,7 +14,9 @@ def flatten_depots(request: Request, response: Response) -> pd.DataFrame:
         df_request, df_response, on=["depot_id", "vehicle_type"], how="outer"
     )
     df_combined["vehicles"] = df_combined["vehicles"].fillna(0).astype(int)
-    return df_combined
+    return df_combined.sort_values(by="vehicles", ascending=False).reset_index(
+        drop=True
+    )
 
 
 def _flatten_response_depot_loads(
