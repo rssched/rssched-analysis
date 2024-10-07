@@ -70,30 +70,41 @@ routes, and other relevant metrics. Additionally, an objective value from the re
 """
 )
 
-st.subheader("Upload Data")
-
 # Initialize session state to store file uploads
 if "request_file" not in st.session_state:
     st.session_state.request_file = None
 if "response_file" not in st.session_state:
     st.session_state.response_file = None
 
-# Handle file uploads
-uploaded_files = handle_file_upload()
+# Check if files have been uploaded
+files_uploaded = (
+    st.session_state.request_file is not None
+    and st.session_state.response_file is not None
+)
 
-if uploaded_files:
-    request_file, response_file = uploaded_files
-    set_file_in_session_state(request_file, response_file)
+# Display file uploaders and "Load Example" button only if no files have been uploaded
+if not files_uploaded:
+    st.subheader("Upload Data")
+    uploaded_files = handle_file_upload()
+    if uploaded_files:
+        request_file, response_file = uploaded_files
+        set_file_in_session_state(request_file, response_file)
+        st.rerun()
 
-# Reset button to clear the uploaded files and session state
-if st.button("Reset"):
-    st.session_state.request_file = None
-    st.session_state.response_file = None
-    st.session_state.request_data = None
-    st.session_state.response_data = None
-    st.rerun()
+    if st.button("Load Example"):
+        example_request_file, example_response_file = load_example_files()
+        set_file_in_session_state(example_request_file, example_response_file)
+        st.rerun()
 
-# Load example files when the "Load Example" button is clicked
-if st.button("Load Example"):
-    example_request_file, example_response_file = load_example_files()
-    set_file_in_session_state(example_request_file, example_response_file)
+
+# Show the reset button only if files have been uploaded
+if files_uploaded:
+    st.subheader("Uploaded Data")
+    st.write(f"**Request File:** {st.session_state.request_file.name}")
+    st.write(f"**Response File:** {st.session_state.response_file.name}")
+    if st.button("Reset"):
+        st.session_state.request_file = None
+        st.session_state.response_file = None
+        st.session_state.request_data = None
+        st.session_state.response_data = None
+        st.rerun()
