@@ -33,5 +33,7 @@ with tabs[1]:
         "Choose depot to see detailed statistics",
         df_depots[df_depots["vehicles"] > 0]["depot_id"].unique(),
     )
-    st.plotly_chart(plot_depot_vehicle_loads(response, instance_name, selected_depot))
+    st.plotly_chart(
+        plot_depot_vehicle_loads(request, response, instance_name, selected_depot)
+    )
     st.dataframe(df_depots[df_depots["depot_id"] == selected_depot], hide_index=True)
