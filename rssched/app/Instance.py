@@ -80,9 +80,8 @@ st.title("RSSched Analyzer")
 st.markdown(
     """
 ### About
-This page provides an aggregated summary of the request data uploaded by the user. 
-You can see important statistics such as the number of locations, vehicle types, depots, 
-routes, and other relevant metrics. Additionally, an objective value from the response is also displayed below.
+The [RSSched](https://github.com/rolling-stock-scheduling) project by SBB and ETHZ aims to estimate rolling stock demand for given timetables and constraints, such as siding and maintenance capacities.
+This tool allows you to analyze solved instances from the solver. Start by uploading your JSON files or load example data to explore the visualizations.
 """
 )
 
@@ -94,7 +93,7 @@ files_uploaded = (
 
 # Display file uploaders and "Load Example" button only if no files have been uploaded
 if not files_uploaded:
-    st.subheader("Upload Data")
+    st.markdown("### Upload Instance")
     uploaded_files = handle_file_upload()
     if uploaded_files:
         request_file, response_file = uploaded_files
@@ -113,7 +112,7 @@ if not files_uploaded:
 if files_uploaded:
     request, response, instance_name = get_uploaded_data()
 
-    st.subheader("Uploaded Data")
+    st.markdown("### Uploaded Instance")
     st.write(f"**Request File:** {st.session_state.request_file.name}")
     st.dataframe(get_request_summary(request), hide_index=True)
     st.write(f"**Response File:** {st.session_state.response_file.name}")
