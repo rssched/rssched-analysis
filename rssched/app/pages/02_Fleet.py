@@ -3,15 +3,19 @@ from typing import Any
 import streamlit as st
 
 from rssched.app.utils.io import get_uploaded_data
+from rssched.app.utils.transform import get_vehicle_types
 from rssched.visualization.active_events import plot_active_events_over_time
 from rssched.visualization.fleet_efficiency import plot_fleet_efficiency
 from rssched.visualization.vehicle_type_gantt import plot_gantt_per_vehicle_type
-from rssched.visualization.vehicle_utilization import plot_vehicle_utilization
+from rssched.visualization.vehicle_utilization import plot_utilization_per_vehicle_type
 
 st.title("Fleet")
 
 request, response, instance_name = get_uploaded_data()
 
+selected_vehicle_type: str = st.selectbox(
+    "Choose vehicle type", get_vehicle_types(response)
+)
 
 tabs = st.tabs(
     ["Vehicle Circuits", "Active Events", "Vehicle Utilization", "Efficiency"]
@@ -19,15 +23,15 @@ tabs = st.tabs(
 
 with tabs[0]:
     plots = plot_gantt_per_vehicle_type(response, instance_name)
-    selected_vehicle_type: str = st.selectbox("Choose vehicle type", plots.keys())
     st.plotly_chart(plots[selected_vehicle_type])
 
 with tabs[1]:
     st.plotly_chart(plot_active_events_over_time(response, instance_name))
 
 with tabs[2]:
-    st.plotly_chart(plot_vehicle_utilization(response, instance_name))
+    plots = plot_utilization_per_vehicle_type(response, instance_name)
+    st.plotly_chart(plots[selected_vehicle_type])
 
 with tabs[3]:
-    for fig in plot_fleet_efficiency(response, instance_name):
-        st.plotly_chart(fig)
+    plots = plot_fleet_efficiency(response, instance_name)
+    st.plotly_chart(plots[selected_vehicle_type])

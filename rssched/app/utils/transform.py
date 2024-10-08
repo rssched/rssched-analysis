@@ -34,6 +34,10 @@ def get_response_summary(response: Response) -> pd.DataFrame:
     )
 
 
+def get_vehicle_types(response: Response) -> list[str]:
+    return [fleet.vehicle_type for fleet in response.schedule.fleet]
+
+
 def get_vehicle_summary(response: Response):
     data = []
 

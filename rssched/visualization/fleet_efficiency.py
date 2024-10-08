@@ -58,12 +58,14 @@ def summarize_vehicle_activities(response):
     return df_activities
 
 
-def plot_fleet_efficiency(response: Response, instance_name: str):
+def plot_fleet_efficiency(
+    response: Response, instance_name: str
+) -> dict[str, go.Figure]:
     df = summarize_vehicle_activities(response)
 
     vehicle_types = df["vehicle_type"].unique()
 
-    figs = []
+    figs = {}
 
     for v_type in vehicle_types:
         filtered_df = df[df["vehicle_type"] == v_type]
@@ -82,8 +84,8 @@ def plot_fleet_efficiency(response: Response, instance_name: str):
             ]
         )
         fig.update_layout(
-            title=f"Activity Distribution: {v_type} (instance: {instance_name})"
+            title=f"Activity Distribution '{v_type}' (instance: {instance_name})"
         )
-        figs.append(fig)
+        figs[v_type] = fig
 
     return figs
