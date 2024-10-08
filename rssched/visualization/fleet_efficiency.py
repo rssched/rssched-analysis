@@ -58,7 +58,7 @@ def summarize_vehicle_activities(response):
     return df_activities
 
 
-def plot_fleet_efficiency(
+def plot_fleet_efficiency_per_vehicle_type(
     response: Response, instance_name: str
 ) -> dict[str, go.Figure]:
     df = summarize_vehicle_activities(response)
