@@ -7,6 +7,33 @@ from rssched.model.request import Depot, Request
 from rssched.model.response import DepotLoad
 
 
+def get_request_summary(request: Request) -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "locations": [len(request.vehicle_types)],
+            "vehicle_types": [len(request.vehicle_types)],
+            "depots": [len(request.depots)],
+            "depot_capacity": [sum(depot.capacity for depot in request.depots)],
+            "routes": [len(request.routes)],
+            "departures": [len(request.departures)],
+            "maintenance_tracks": [
+                sum(slot.track_count for slot in request.maintenance_slots)
+            ],
+        }
+    )
+
+
+def get_response_summary(response: Response) -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "unserved_passengers": [response.objective_value.unserved_passengers],
+            "maintenance_violoation": [response.objective_value.maintenance_violation],
+            "vehicle_count": [response.objective_value.vehicle_count],
+            "costs": [response.objective_value.costs],
+        }
+    )
+
+
 def flatten_depots(request: Request, response: Response) -> pd.DataFrame:
     df_request = _flatten_request_depots(request.depots)
     df_response = _flatten_response_depot_loads(response.schedule.depot_loads)

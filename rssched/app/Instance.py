@@ -4,7 +4,8 @@ from typing import Optional, Tuple
 
 import streamlit as st
 
-from rssched.app.utils.io import import_request, import_response
+from rssched.app.utils.io import get_uploaded_data, import_request, import_response
+from rssched.app.utils.transform import get_request_summary, get_response_summary
 from rssched.data.access import PkgDataAccess
 
 
@@ -110,9 +111,14 @@ if not files_uploaded:
 
 # Show the reset button only if files have been uploaded
 if files_uploaded:
+    request, response, instance_name = get_uploaded_data()
+
     st.subheader("Uploaded Data")
     st.write(f"**Request File:** {st.session_state.request_file.name}")
+    st.dataframe(get_request_summary(request), hide_index=True)
     st.write(f"**Response File:** {st.session_state.response_file.name}")
+    st.dataframe(get_response_summary(response), hide_index=True)
+
     if st.button("Reset"):
         st.session_state.request_file = None
         st.session_state.response_file = None
