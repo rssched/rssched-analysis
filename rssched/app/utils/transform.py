@@ -34,6 +34,27 @@ def get_response_summary(response: Response) -> pd.DataFrame:
     )
 
 
+def get_vehicle_summary(response: Response):
+    data = []
+
+    for depot_load in response.schedule.depot_loads:
+        depot = depot_load.depot
+        for load in depot_load.load:
+            vehicle_type = load.vehicle_type
+            spawn_count = load.spawn_count
+            data.append(
+                {"location": depot, "vehicle_type": vehicle_type, "count": spawn_count}
+            )
+
+    return (
+        pd.DataFrame(data)
+        .groupby("vehicle_type")["count"]
+        .sum()
+        .sort_values()
+        .reset_index()
+    )
+
+
 def flatten_depots(request: Request, response: Response) -> pd.DataFrame:
     df_request = _flatten_request_depots(request.depots)
     df_response = _flatten_response_depot_loads(response.schedule.depot_loads)

@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from plotly.graph_objs import Figure
 
 
-def plot_depots_bar_chart(df_depots: pd.DataFrame) -> Figure:
+def plot_depots_bar_chart(df_depots: pd.DataFrame, instance_name: str) -> Figure:
     # Group by depot_id to calculate the total capacity and sort by the number of vehicles
     df_depots_grouped = (
         df_depots[df_depots["vehicles"] > 0]
@@ -38,7 +38,7 @@ def plot_depots_bar_chart(df_depots: pd.DataFrame) -> Figure:
     # Update layout of the bar chart
     fig.update_layout(
         barmode="group",  # Bars grouped side by side
-        title="Depot Vehicles and Capacity",
+        title=f"Depot Usage (Instance: {instance_name})",
         xaxis_title="Depot ID",
         # yaxis_title="Count",
         legend_title="Legend",
