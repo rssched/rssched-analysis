@@ -80,7 +80,7 @@ st.title("RSSched Analyzer")
 st.markdown(
     """
 ### About
-The [RSSched](https://github.com/rolling-stock-scheduling) project by SBB and ETHZ aims to estimate rolling stock demand for given timetables and constraints, such as siding and maintenance capacities.
+The [RSSched](https://github.com/rssched) project by SBB and ETHZ aims to estimate rolling stock demand for given timetables and constraints, such as siding and maintenance capacities.
 This tool allows you to analyze solved instances from the solver. Start by uploading your JSON files or load example data to explore the visualizations.
 """
 )
