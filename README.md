@@ -23,6 +23,11 @@ Visualize a rolling stock scheduling response from the solver:
 poetry run rssched-plot rssched/data/small_test_response.json
 ```
 
+To start a streamlit dashboard run
+```sh
+poetry run streamlit run rssched/app/Instance.py
+```
+
 ## Development
 
 Before committing, run the following commands from the project root directory:
